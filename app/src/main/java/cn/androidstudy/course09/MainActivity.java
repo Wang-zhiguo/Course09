@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //新建的xml文件
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
     //为菜单项添加事件处理
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.baseadapter:
+            case R.id.listviewoptimize:
                 //Toast.makeText(this, "BaseAdapter Click!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this,BaseAdapterActivity.class);
                 startActivity(intent);
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(this, "SimpleAdapter Click!", Toast.LENGTH_SHORT).show();
                 Intent intent3 = new Intent(this,SimpleAdapterActivity.class);
                 startActivity(intent3);
+                break;
+            case R.id.all:
+                Intent intent4 = new Intent(this,AllActivity.class);
+                startActivity(intent4);
                 break;
         }
         return true;
@@ -74,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void insert(SQLiteDatabase db) {
-        //实例化常量值
+        //实例化常量值  Key（表中的列名）-Value
         ContentValues cValue = new ContentValues();
         //添加用户名
         cValue.put("sname", "xiaoming");
@@ -86,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void insert2(SQLiteDatabase db) {
         //插入数据SQL语句
-        String sql = "insert into usertable(sname,snumber) values('xiaoming','01005')";
+        String sql = "insert into usertable(sname,snumber) " +
+                "values('xiaoming','01005')";
         //执行SQL语句
         db.execSQL(sql);
     }
@@ -115,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         //修改条件
         String whereClause = "_id=?";
         //修改添加参数
-        String[] whereArgs = {String.valueOf(1)};
+        String[] whereArgs = {String.valueOf(4)};
         //修改
         db.update("usertable", values, whereClause, whereArgs);
     }
@@ -129,13 +136,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void query(SQLiteDatabase db) {
         //查询获得游标
-        Cursor cursor = db.query("usertable", null, null, null, null, null, null);
+        Cursor cursor = db.query("usertable",
+                null,
+                null, null,
+                null, null, null);
 
         //判断游标是否为空
-        if (cursor.moveToFirst()) {
-            //遍历游标
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.move(i);
+        while (cursor.moveToNext()){
+
                 //获得ID
                 int id = cursor.getInt(0);
                 //获得用户名
@@ -143,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 //获得密码
                 String password = cursor.getString(2);
                 //输出用户信息
-                System.out.println(id + ":" + username + ":" + password);
-            }
+                System.out.println( id+":" + username + ":" + password);
         }
     }
+
 }

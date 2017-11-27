@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".BaseAdapterActivity" />
         <activity android:name=".ArrayAdapterActivity" />
-        <activity android:name=".SimpleAdapterActivity"></activity>
+        <activity android:name=".SimpleAdapterActivity" />
+        <activity android:name=".AllActivity"></activity>
     </application>
 
 </manifest>

@@ -111,4 +111,46 @@ public class BaseAdapterActivity extends AppCompatActivity {
             return view;
         }
     }
+
+    //优化
+    class MyAdapter4 extends BaseAdapter{
+        //决定ListView中显示的“项”的数量
+        @Override
+        public int getCount() {
+            return cities.length;
+        }
+        //获得指定位置的对象
+        @Override
+        public Object getItem(int position) {
+            return cities[position];
+        }
+        //获得“项”的Id
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+        //决定每个“项”的显示
+        //优化，就是只加载一次布局，并把布局保存起来，以后复用
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if(convertView==null){//如果为空，则加载
+                holder = new ViewHolder();
+                convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_list,null);
+                holder.tv_name = (TextView) convertView.findViewById(R.id.textView);
+                holder.tv_desc = (TextView)convertView.findViewById(R.id.textView2);
+                convertView.setTag(holder);//保存ViewHolder对象
+            }else {//如果非空，直接读取保存的
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.tv_name.setText(cities[position]);
+            holder.tv_desc.setText("Item "+position);
+            return convertView;
+        }
+    }
+    class ViewHolder{
+        public TextView tv_name;
+        public TextView tv_desc;
+    }
 }
